@@ -1,4 +1,4 @@
-# thoughtspot-custom-chart
+Thoughtspot custom chart
 Custom chart generation for ThoughtSpot. 
 
 For new custom chart project setup:
