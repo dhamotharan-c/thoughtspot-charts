@@ -1,4 +1,5 @@
-Thoughtspot custom chart
+# Thoughtspot Custom Chart - BYOC
+
 Custom chart generation for ThoughtSpot. 
 
 For new custom chart project setup:
