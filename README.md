@@ -18,4 +18,12 @@ Version & Requirements:
 
 Highchart Usablity:
 
-      ES modules will differs for each charts 
+    ES modules will differs for each charts 
+
+Our Explores
+
+    Gauge Chart - 0.0.2-alpha.10
+    Vercel url - https://thoughtspot-custom-gaugechart-d98coewcl-dhams-projects.vercel.app
+    Dump code from TS SDK example.
+    Issues facing - Edit charts > Configure & Settings tabs updates or any edits (eg: changing colors, values, plots) will reflect on chart refresh state only.
+    Dynamically it taking the values after apply, but it needs a refresh on chart to reflect those changes visually. 
