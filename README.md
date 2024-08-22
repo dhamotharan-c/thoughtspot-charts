@@ -1,2 +1,2 @@
-# thoughtspot-custom-piechart
-Custom pie chart generation for ThoughtSpot. 
+# thoughtspot-custom-chart
+Custom chart generation for ThoughtSpot. 
