@@ -7,7 +7,7 @@ import {
     getChartContext,
     ChartColumn,
     DataPointsArray,
-    ColumnType
+    // ColumnType
   } from '@thoughtspot/ts-chart-sdk';
   
 import Highcharts from 'highcharts';
@@ -27,10 +27,10 @@ const getDataModel = (chartModel: any) =>{
     // create point from data
     const points = dataArr.dataValue.map((row: any[], idx: number) => {
         return {
-            id: `${row[0]} ${row[1]}`,
-            parent: row[0],
-            name: row[1],
-            namevalue: row[2],
+            // id: `${row[0]}`,
+            // // parent: row[0],
+            tagname: row[0],
+            tagvalue: row[1],
             
         };
     });
@@ -46,7 +46,7 @@ const getDataModel = (chartModel: any) =>{
                 data: [
                     ...filteredPoints,
                     {
-                        id: project,
+                        // id: project.tagname,
                         name: project,
                     },
                 ],
@@ -95,14 +95,14 @@ const init = async () => {
         getDefaultChartConfig: (chartModel: ChartModel): ChartConfig[] => {
             const columns = chartModel.columns;
 
-            const measureColumns = _.filter(
-                columns, 
-                (columns) => columns.type === ColumnType.MEASURE,
-            );
-            const attributeColumns = _.filter(
-                columns, 
-                (columns) => columns.type === ColumnType.ATTRIBUTE,
-            );
+            // const measureColumns = _.filter(
+            //     columns, 
+            //     (columns) => columns.type === ColumnType.MEASURE,
+            // );
+            // const attributeColumns = _.filter(
+            //     columns, 
+            //     (columns) => columns.type === ColumnType.ATTRIBUTE,
+            // );
             const chartConfig: ChartConfig = {
                 key: 'default',
                 dimensions:[
@@ -112,11 +112,11 @@ const init = async () => {
                     },
                     {
                         key: 'tagname',
-                        columns: [...attributeColumns],
+                        columns: [columns[1]],
                     },
                     {
                         key: 'tagvalue',
-                        columns: [...measureColumns],
+                        columns: [columns[2]],
                     },
                     
                 ],
