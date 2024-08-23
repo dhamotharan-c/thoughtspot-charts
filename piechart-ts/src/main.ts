@@ -5,10 +5,7 @@ import {
     ChartModel,
     Query,
     getChartContext,
-    ChartToTSEvent,
     ColumnType,
-    ChartColumn,
-    DataPointsArray,
     CustomChartContext,
   } from '@thoughtspot/ts-chart-sdk';
   
