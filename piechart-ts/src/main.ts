@@ -5,7 +5,6 @@ import {
     ChartModel,
     Query,
     getChartContext,
-    ColumnType,
     CustomChartContext,
   } from '@thoughtspot/ts-chart-sdk';
   
@@ -80,14 +79,14 @@ const init = async () => {
         getDefaultChartConfig: (chartModel: ChartModel): ChartConfig[] => {
             const columns = chartModel.columns;
 
-            const measureColumns = _.filter(
-                columns, 
-                (columns) => columns.type === ColumnType.MEASURE,
-            );
-            const attributeColumns = _.filter(
-                columns, 
-                (columns) => columns.type === ColumnType.ATTRIBUTE,
-            );
+            // const measureColumns = _.filter(
+            //     columns, 
+            //     (columns) => columns.type === ColumnType.MEASURE,
+            // );
+            // const attributeColumns = _.filter(
+            //     columns, 
+            //     (columns) => columns.type === ColumnType.ATTRIBUTE,
+            // );
             const chartConfig: ChartConfig = {
                 key: 'default',
                 dimensions:[
@@ -97,11 +96,11 @@ const init = async () => {
                     },
                     {
                         key: 'tagname',
-                        columns: [attributeColumns[1]],
+                        columns: [columns[1]],
                     },
                     {
                         key: 'tagvalue',
-                        columns: [measureColumns[2]],
+                        columns: [columns[2]],
                     },
                     
                 ],
