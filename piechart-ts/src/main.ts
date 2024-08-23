@@ -5,7 +5,9 @@ import {
     ChartModel,
     Query,
     getChartContext,
-    CustomChartContext,
+    ChartColumn,
+    DataPointsArray,
+    ColumnType
   } from '@thoughtspot/ts-chart-sdk';
   
 import Highcharts from 'highcharts';
@@ -13,42 +15,56 @@ import 'highcharts/modules/accessibility';
 
 import _ from 'lodash';
 
-const getDataModel = (chartModel: ChartModel) =>{
-    const data = chartModel.data;
+function getDataForColumn(column: ChartColumn, dataArr: DataPointsArray) {
+    const idx = _.findIndex(dataArr.columns, (colId) => column.id === colId);
+    return _.map(dataArr.dataValue, (row) => row[idx]);
+}
 
-    const points = data?.[0].data.dataValue.map((row)=>{
-        return{
-            projectname: row[0],
-            tagname: row[1],
-            tagvalue: row[2],
+const getDataModel = (chartModel: any) =>{
+    const columns = chartModel.columns;
+    const dataArr: DataPointsArray = chartModel.data[0].data;
+
+    // create point from data
+    const points = dataArr.dataValue.map((row: any[], idx: number) => {
+        return {
+            id: `${row[0]} ${row[1]}`,
+            parent: row[0],
+            name: row[1],
+            namevalue: row[2],
+            
         };
     });
 
-    const projectwisepoints = _.groupBy(points,'projectname');
-    const series = Object.keys(projectwisepoints).map((projectName) =>{
-
-        return{
-            name: projectName,
-            data: projectwisepoints[projectName].map((point:any) => {
-                return{
-                    name: point.tagname,
-                    value: point.tagvalue,
-                }
-            }),
-        }
-    
-    });
+        // create projects from points & data
+        const projects = _.uniq(getDataForColumn(columns[0], dataArr));
+        const dataSeries = projects.map((project) => {
+            const filteredPoints = points.filter(
+                (point: any) => point.parent === project,
+            );
+            return {
+                name: project,
+                data: [
+                    ...filteredPoints,
+                    {
+                        id: project,
+                        name: project,
+                    },
+                ],
+            };
+        });
     return{
-        series,
+        dataSeries,
     }
 
 }
 
 
-const renderChart = (ctx: CustomChartContext) => {
+const renderChart = (ctx: any) => {
 
     const chartModel = ctx.getChartModel();
     const dataModel = getDataModel(chartModel);
+
+    debugger;
 
     Highcharts.chart('pieApp', {
     accessibility: {
@@ -67,7 +83,7 @@ const renderChart = (ctx: CustomChartContext) => {
         text:
         'Source: Unknown'
     },
-    series: dataModel.series as any,
+    series: dataModel.dataSeries as any,
 
     } as any);
 
@@ -79,14 +95,14 @@ const init = async () => {
         getDefaultChartConfig: (chartModel: ChartModel): ChartConfig[] => {
             const columns = chartModel.columns;
 
-            // const measureColumns = _.filter(
-            //     columns, 
-            //     (columns) => columns.type === ColumnType.MEASURE,
-            // );
-            // const attributeColumns = _.filter(
-            //     columns, 
-            //     (columns) => columns.type === ColumnType.ATTRIBUTE,
-            // );
+            const measureColumns = _.filter(
+                columns, 
+                (columns) => columns.type === ColumnType.MEASURE,
+            );
+            const attributeColumns = _.filter(
+                columns, 
+                (columns) => columns.type === ColumnType.ATTRIBUTE,
+            );
             const chartConfig: ChartConfig = {
                 key: 'default',
                 dimensions:[
@@ -96,11 +112,11 @@ const init = async () => {
                     },
                     {
                         key: 'tagname',
-                        columns: [columns[1]],
+                        columns: [...attributeColumns],
                     },
                     {
                         key: 'tagvalue',
-                        columns: [columns[2]],
+                        columns: [...measureColumns],
                     },
                     
                 ],
@@ -128,7 +144,7 @@ const init = async () => {
                     ),
             );
         },
-        renderChart: (context:CustomChartContext) => renderChart(context),
+        renderChart: (context) => renderChart(context),
     });
     await renderChart(ctx);
 };
