@@ -21,7 +21,7 @@ Highchart Usablity:
 
     ES modules will differs for each charts 
 
-Explores
+Findings
 
     Gauge Chart - 0.0.2-alpha.10
     Vercel url - https://thoughtspot-custom-gaugechart-d98coewcl-dhams-projects.vercel.app
