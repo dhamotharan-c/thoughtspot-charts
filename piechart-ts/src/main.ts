@@ -72,34 +72,7 @@ const renderChart = (ctx: CustomChartContext) => {
         'Source: Unknown'
     },
     series: dataModel.series as any,
-    // series: [
-    //     {
-    //         name: 'Poduct', //Project name - Basically a type of series name column
-    //         colorByPoint: true,
-    //         data: [
-    //             {                        //Two columns struct
-    //                 name: 'Water',       //Column attribute selection
-    //                 y: 55.02             //Column Measure selection
-    //             },
-    //             {
-    //                 name: 'Fat',
-    //                 y: 26.71
-    //             },
-    //             {
-    //                 name: 'Carbohydrates',
-    //                 y: 1.09
-    //             },
-    //             {
-    //                 name: 'Protein',
-    //                 y: 15.5
-    //             },
-    //             {
-    //                 name: 'Ash',
-    //                 y: 1.68
-    //             }
-    //         ]
-    //     }
-    // ]
+
     } as any);
 
     return Promise.resolve();
