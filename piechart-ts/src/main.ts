@@ -7,7 +7,7 @@ import {
     getChartContext,
     ChartColumn,
     DataPointsArray,
-    // ColumnType
+    ColumnType
   } from '@thoughtspot/ts-chart-sdk';
   
 import Highcharts from 'highcharts';
@@ -24,39 +24,42 @@ const getDataModel = (chartModel: any) =>{
     const columns = chartModel.columns;
     const dataArr: DataPointsArray = chartModel.data[0].data;
 
+    debugger;
+
     // create point from data
     const points = dataArr.dataValue.map((row: any[], idx: number) => {
         return {
-            // id: `${row[0]}`,
-            // // parent: row[0],
-            tagname: row[0],
-            tagvalue: row[1],
+            id: `${row[0]} ${row[1]}`,
+            project: row[0],
+            name: row[1],
+            value: row[2],
+
             
         };
     });
 
         // create projects from points & data
-        const projects = _.uniq(getDataForColumn(columns[0], dataArr));
-        const dataSeries = projects.map((project) => {
-            const filteredPoints = points.filter(
-                (point: any) => point.parent === project,
-            );
-            return {
-                name: project,
-                data: [
-                    ...filteredPoints,
-                    {
-                        // id: project.tagname,
-                        name: project,
-                    },
-                ],
-            };
-        });
+    const projects = _.uniq(getDataForColumn(columns[0], dataArr));
+    const dataSeries = projects.map((project) => {
+        const filteredPoints = points.filter(
+            (point: any) => point.parent === project,
+        );
+        return {
+            name: project,
+            data: [
+                ...filteredPoints,
+                {
+                    id: project,
+                    name: project,
+                },
+            ],
+        };
+    });
     return{
         dataSeries,
     }
 
-}
+};
 
 
 const renderChart = (ctx: any) => {
@@ -88,35 +91,35 @@ const renderChart = (ctx: any) => {
     } as any);
 
     return Promise.resolve();
-}
+};
 
 const init = async () => {
     const ctx = await getChartContext({
         getDefaultChartConfig: (chartModel: ChartModel): ChartConfig[] => {
             const columns = chartModel.columns;
 
-            // const measureColumns = _.filter(
-            //     columns, 
-            //     (columns) => columns.type === ColumnType.MEASURE,
-            // );
-            // const attributeColumns = _.filter(
-            //     columns, 
-            //     (columns) => columns.type === ColumnType.ATTRIBUTE,
-            // );
+            const measureColumns = _.filter(
+                columns, 
+                (columns) => columns.type === ColumnType.MEASURE,
+            );
+            const attributeColumns = _.filter(
+                columns, 
+                (columns) => columns.type === ColumnType.ATTRIBUTE,
+            );
             const chartConfig: ChartConfig = {
                 key: 'default',
                 dimensions:[
                     {
-                        key: 'projectname',
+                        key: 'project',
                         columns: [columns[0]],
                     },
                     {
-                        key: 'tagname',
-                        columns: [columns[1]],
+                        key: 'name',
+                        columns: [...attributeColumns],
                     },
                     {
-                        key: 'tagvalue',
-                        columns: [columns[2]],
+                        key: 'value',
+                        columns: [...measureColumns],
                     },
                     
                 ],
